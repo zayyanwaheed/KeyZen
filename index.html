@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KeyZen — Master Your Keystrokes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1A1000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="3"/>
+        <path d="M6 9h2M10 9h2M14 9h2M18 9h0M6 13h2M10 13h2M14 13h2M18 13h0M8 17h8"/>
+      </svg>
+    </div>
+    <span class="logo-text">Key<span>Zen</span></span>
+  </a>
+  <div class="header-right">
+    <!-- Streak badge -->
+    <div class="streak-badge" id="streak-badge" style="display:none">
+      <span class="streak-fire">🔥</span>
+      <span class="streak-count" id="streak-count">0</span>
+    </div>
+
+    <div class="nav-pills">
+      <button class="nav-pill active" onclick="setMode('exercises')" id="mode-exercises">Exercises</button>
+      <button class="nav-pill" onclick="setMode('words')"     id="mode-words">Words</button>
+      <button class="nav-pill" onclick="setMode('quotes')"    id="mode-quotes">Quotes</button>
+      <button class="nav-pill" onclick="setMode('code')"      id="mode-code">Code</button>
+    </div>
+
+    <!-- Sound toggle -->
+    <button class="icon-btn" id="sound-btn" onclick="toggleSound()" aria-label="Toggle sound" data-tip="Sound off">
+      <svg id="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      <svg id="icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+
+    <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle theme" data-tip="Toggle theme">
+      <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Master Your <em>Keystrokes</em></h1>
+    <p>140 exercises across Easy, Normal &amp; Hard &nbsp;·&nbsp; Real-time WPM &nbsp;·&nbsp; Track every milestone</p>
+  </div>
+
+  <!-- Caps lock warning -->
+  <div class="caps-warning" id="caps-warning" style="display:none">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Caps Lock is on — turn it off to type correctly
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <div class="ctrl-group" id="level-group">
+      <button class="ctrl-btn easy-active" onclick="setLevel('easy')" id="lv-easy">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>Easy
+      </button>
+      <button class="ctrl-btn" onclick="setLevel('normal')" id="lv-normal">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Normal
+      </button>
+      <button class="ctrl-btn" onclick="setLevel('hard')" id="lv-hard">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Hard
+      </button>
+    </div>
+    <div class="ctrl-sep" id="sep-lv"></div>
+    <div class="ctrl-group" id="time-group" style="display:none">
+      <button class="ctrl-btn" onclick="setTime(15)"  id="t15">15s</button>
+      <button class="ctrl-btn active" onclick="setTime(30)" id="t30">30s</button>
+      <button class="ctrl-btn" onclick="setTime(60)"  id="t60">60s</button>
+      <button class="ctrl-btn" onclick="setTime(120)" id="t120">120s</button>
+    </div>
+    <div class="ctrl-group" id="punc-group" style="display:none">
+      <button class="ctrl-btn active" onclick="setPunctuation(false)" id="punc-off">Simple</button>
+      <button class="ctrl-btn" onclick="setPunctuation(true)" id="punc-on">Punct.</button>
+    </div>
+    <div class="ctrl-group" id="num-group" style="display:none">
+      <button class="ctrl-btn active" onclick="setNumbers(false)" id="num-off">No #</button>
+      <button class="ctrl-btn" onclick="setNumbers(true)" id="num-on">Nums</button>
+    </div>
+    <button class="browse-btn" id="browse-btn" onclick="toggleBrowser()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Browse All
+    </button>
+  </div>
+
+  <!-- Exercise panel -->
+  <div class="exercise-panel show" id="exercise-panel">
+    <div class="ex-header">
+      <div class="ex-title-row">
+        <div class="ex-num" id="ex-num">1</div>
+        <div class="ex-of" id="ex-of">/ 50</div>
+        <div class="level-badge easy" id="ex-badge">Easy</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="ex-nav">
+          <button class="ex-nav-btn" onclick="prevEx()" id="btn-prev" data-tip="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="ex-nav-btn" onclick="nextEx()" id="btn-next" data-tip="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button class="ex-nav-btn" onclick="randEx()" data-tip="Random">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Grid browser -->
+    <div class="ex-grid-panel" id="ex-grid-panel">
+      <div class="grid-section-title"><span class="dot" style="background:var(--easy)"></span>Easy Exercises</div>
+      <div class="ex-grid" id="grid-easy"></div>
+      <div class="grid-section-title" style="margin-top:.85rem"><span class="dot" style="background:var(--normal)"></span>Normal Exercises</div>
+      <div class="ex-grid" id="grid-normal"></div>
+      <div class="grid-section-title" style="margin-top:.85rem"><span class="dot" style="background:var(--hard)"></span>Hard Exercises</div>
+      <div class="ex-grid" id="grid-hard"></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-value" id="stat-timer">—</div><div class="stat-label">Time</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat-item"><div class="stat-value" id="stat-wpm">—</div><div class="stat-label">WPM</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat-item"><div class="stat-value" id="stat-acc">—</div><div class="stat-label">Acc</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat-item"><div class="stat-value" id="stat-errors">0</div><div class="stat-label">Errors</div></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-track">
+      <span class="progress-label" id="prog-label">Progress</span>
+      <span class="progress-label" id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <!-- Typing card -->
+  <div class="typing-wrapper">
+    <div class="typing-card" id="typing-card" onclick="focusInput()">
+      <!-- Live WPM mini chart -->
+      <canvas id="live-chart" class="live-chart"></canvas>
+      <div class="typing-text" id="typing-text"></div>
+      <div class="caret" id="caret" style="display:none"></div>
+      <input type="text" id="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-hidden="true">
+    </div>
+    <div class="click-hint" id="click-hint">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13 12H3"/></svg>
+      Click to start &nbsp;·&nbsp; <span class="kbd">Tab</span>+<span class="kbd">↵</span> restart &nbsp;·&nbsp; <span class="kbd">→</span> next exercise
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="action-btn primary" onclick="restartTest()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Restart
+    </button>
+    <button class="action-btn" onclick="prevEx()" id="act-prev">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>Prev
+    </button>
+    <button class="action-btn" onclick="nextEx()" id="act-next">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>Next
+    </button>
+    <button class="action-btn" onclick="randEx()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>Random
+    </button>
+    <button class="action-btn" onclick="toggleHeatmap()" id="heatmap-btn" data-tip="Key heatmap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M6 9h2M10 9h2M14 9h2M18 9h0M6 13h2M10 13h2M14 13h2M18 13h0M8 17h8"/></svg>Heatmap
+    </button>
+  </div>
+
+  <!-- Keyboard heatmap panel -->
+  <div class="heatmap-panel" id="heatmap-panel" style="display:none">
+    <div class="heatmap-header">
+      <span class="heatmap-title">Key Error Heatmap</span>
+      <span class="heatmap-sub">Darker = more mistakes on that key</span>
+      <button class="heatmap-reset" onclick="resetHeatmap()">Reset</button>
+    </div>
+    <div class="keyboard-wrap" id="keyboard-wrap">
+      <!-- built by JS -->
+    </div>
+    <div class="heatmap-legend">
+      <span class="legend-label">No errors</span>
+      <div class="legend-bar"></div>
+      <span class="legend-label">Most errors</span>
+    </div>
+  </div>
+
+  <!-- Info strip -->
+  <div class="info-strip">
+    <div class="info-card">
+      <div class="info-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div>
+        <div class="info-card-title">Personal Best</div>
+        <div class="info-card-sub"><strong id="pb-wpm">—</strong> WPM &nbsp;·&nbsp; <strong id="pb-acc">—</strong></div>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div style="flex:1;min-width:0">
+        <div class="info-card-title">Session</div>
+        <div class="info-card-sub">Tests: <strong id="tests-count">0</strong> &nbsp;·&nbsp; Avg: <strong id="avg-wpm">—</strong></div>
+        <canvas id="sparkline" class="sparkline-canvas" width="120" height="28"></canvas>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div>
+        <div class="info-card-title">Avg Accuracy</div>
+        <div class="info-card-sub"><strong id="avg-acc">—</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion bars -->
+  <div class="ex-completion" id="ex-completion">
+    <div class="ex-comp-card">
+      <div class="ex-comp-icon easy">E</div>
+      <div class="ex-comp-info">
+        <div class="ex-comp-name">Easy — <span id="done-easy">0</span>/50</div>
+        <div class="ex-comp-bar"><div class="ex-comp-fill easy" id="fill-easy" style="width:0%"></div></div>
+      </div>
+      <div class="ex-comp-pct" id="pct-easy">0%</div>
+    </div>
+    <div class="ex-comp-card">
+      <div class="ex-comp-icon normal">N</div>
+      <div class="ex-comp-info">
+        <div class="ex-comp-name">Normal — <span id="done-normal">0</span>/50</div>
+        <div class="ex-comp-bar"><div class="ex-comp-fill normal" id="fill-normal" style="width:0%"></div></div>
+      </div>
+      <div class="ex-comp-pct" id="pct-normal">0%</div>
+    </div>
+    <div class="ex-comp-card">
+      <div class="ex-comp-icon hard">H</div>
+      <div class="ex-comp-info">
+        <div class="ex-comp-name">Hard — <span id="done-hard">0</span>/40</div>
+        <div class="ex-comp-bar"><div class="ex-comp-fill hard" id="fill-hard" style="width:0%"></div></div>
+      </div>
+      <div class="ex-comp-pct" id="pct-hard">0%</div>
+    </div>
+  </div>
+</main>
+
+<!-- Results overlay -->
+<div class="results-overlay" id="results-overlay">
+  <div class="results-card">
+    <div class="results-trophy">
+      <svg viewBox="0 0 24 24" fill="#1A1000"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+    </div>
+    <div class="results-title" id="res-title">Test Complete!</div>
+    <div class="results-subtitle" id="res-sub">Here's how you performed</div>
+
+    <!-- Accuracy arc -->
+    <div class="acc-arc-wrap">
+      <svg class="acc-arc" viewBox="0 0 120 70">
+        <path class="arc-track" d="M10,60 A50,50 0 0,1 110,60" fill="none" stroke-width="8" stroke-linecap="round"/>
+        <path class="arc-fill" id="arc-fill" d="M10,60 A50,50 0 0,1 110,60" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="157"/>
+      </svg>
+      <div class="arc-value" id="arc-value">0%</div>
+      <div class="arc-label">accuracy</div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-stat"><div class="rs-value" id="res-wpm">0</div><div class="rs-label">WPM</div></div>
+      <div class="result-stat"><div class="rs-value" id="res-acc">0%</div><div class="rs-label">Accuracy</div></div>
+      <div class="result-stat"><div class="rs-value" id="res-chars">0</div><div class="rs-label">Characters</div></div>
+      <div class="result-stat"><div class="rs-value" id="res-errors">0</div><div class="rs-label">Errors</div></div>
+    </div>
+
+    <!-- PB banner (shown when new record) -->
+    <div class="pb-banner" id="pb-banner" style="display:none">
+      🏆 New Personal Best!
+    </div>
+
+    <div class="results-actions">
+      <button class="action-btn primary" onclick="closeResults();restartTest()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Try Again
+      </button>
+      <button class="action-btn" onclick="closeResults();nextEx()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:13px;height:13px"><path d="M9 18l6-6-6-6"/></svg>Next
+      </button>
+      <button class="action-btn" onclick="closeResults()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:13px;height:13px"><path d="M18 6 6 18M6 6l12 12"/></svg>Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="shortcut-tag"><span class="kbd">Tab</span>+<span class="kbd">↵</span> Restart</div>
+  <div class="shortcut-tag"><span class="kbd">→</span> Next</div>
+  <div class="shortcut-tag"><span class="kbd">Esc</span> Close</div>
+  <div class="shortcut-tag" style="margin-left:auto;font-size:.71rem">KeyZen © 2025</div>
+</footer>
+
+<!-- Trigr product section -->
+<section class="trigr-section">
+  <div class="trigr-inner">
+    <div class="trigr-badge">A product of</div>
+    <a href="#" class="trigr-brand">
+      <div class="trigr-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#F5C800"/>
+          <path d="M8 10h16M16 10v12M11 22h10" stroke="#1A1000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="trigr-name">Trigr</span>
+    </a>
+    <p class="trigr-tagline">Building tools that sharpen human performance, one keystroke at a time.</p>
+  </div>
+  <div class="trigr-copy">© 2025 Trigr. All rights reserved.</div>
+</section>
+
+<script src="exercises.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
